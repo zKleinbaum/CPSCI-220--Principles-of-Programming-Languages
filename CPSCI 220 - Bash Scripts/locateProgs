@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# locateProgs will search the PATH for the location of a program
+# -s will find shadows
+
+if [[ "$#" -lt 1 ]] || [[ "$#" -gt 2 ]]; then
+    echo Usage: locateProg prog-name
+    exit 1
+fi
+
+if [[ "$#" == 2 ]] && [[ "$2" != "-s" ]]; then
+    echo Usage: locateProg prog-name
+    exit 1
+fi
+
+X=$(echo $PATH | tr : '\n')
+
+COUNT=0
+
+for FILE in $X; do
+    if [ -d $FILE ]; then
+        cd $FILE
+        Y=$(ls * | grep -Fx "$1")
+        if [ "$Y" == $1 ]; then
+            if [[ $COUNT -gt 0 ]]; then
+                echo Shadows $FILE/$1
+                ((COUNT++))
+            else
+                echo $FILE
+                ((COUNT++))
+                if [ "$2" != '-s' ]; then
+                    break
+                fi
+            fi
+        fi
+        cd ..
+    fi
+done
+
+if [ $COUNT == 0 ]; then
+    echo $1 is not found in the path
+fi

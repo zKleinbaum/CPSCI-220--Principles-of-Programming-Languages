@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# xscript will search the current directory for files that have no executable permissions
+# and make them executable by all.
+
+for FILE in $PWD/*; do
+
+    if ! [[ -d $FILE ]]; then
+        HEADER=$(head -1 "$FILE")
+
+        if [[ $HEADER == "#!/bin/bash" ]] || [[ $HEADER == "#!/bin/sh" ]] ; then
+
+            if ! [[ -x "$FILE" ]]; then
+                echo Changing $(basename $FILE) to execute permissions
+                chmod a+x $FILE
+            fi
+        fi
+    fi
+done

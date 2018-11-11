@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# findFiles will search the current directory for a file whos name matches
+# a grep expression.
+
+# Usage: findFiles grep-filename-reg-ex
+
+if [[ "$#" -lt 1 ]] || [[ "$#" -gt 1 ]]; then
+    echo Usage: findFiles grep-filename-regx
+    exit 1
+fi
+
+COUNT=0
+
+X=$(ls | grep "$1")
+for FILE in $X; do
+    echo $PWD/$FILE
+done
+
+for FILE in $PWD/*; do
+    if [ -d $FILE ]; then
+        cd $FILE
+        Y=$(ls | grep "$1")
+        for FILE in $Y; do
+            echo $PWD/$FILE
+        done
+        cd ..
+     fi
+done
+
+for FILE in $PWD/*/*; do
+    if [ -d $FILE ]; then
+        cd $FILE
+        Y=$(ls | grep "$1")
+        for FILE in $Y; do
+            echo $PWD/$FILE
+        done
+        cd ..
+     fi
+done

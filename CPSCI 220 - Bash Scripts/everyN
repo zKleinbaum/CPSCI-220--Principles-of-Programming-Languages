@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# everyN will filter output by line
+
+INCREMENT=0
+COUNT=0
+LINE=0
+
+if [[ $# == 0 ]]; then
+    INCREMENT=2
+else
+    INCREMENT=$1
+fi
+
+if [[ $# == 2 ]]; then
+    LINE=$(($2 - 1))
+
+    if [  $2 -lt $INCREMENT ]; then
+        LINE=$(($2 % INCREMENT - 1))
+        COUNT=$(($(($1 % $2)) * 2))
+    fi
+
+    if [ $1 == $2 ]; then
+        COUNT=1
+    fi
+fi
+
+while read INPUT; do
+    if [[ COUNT -lt $((LINE % INCREMENT)) ]]; then
+        ((COUNT+=1))
+    else
+        if (( $COUNT % $INCREMENT == 0 )); then
+            echo $INPUT
+        fi
+        ((COUNT+=1))
+    fi
+done

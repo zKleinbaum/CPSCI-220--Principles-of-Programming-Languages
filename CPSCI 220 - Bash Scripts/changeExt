@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Change extension will take a file and change its extension
+
+if [[ "$#" -lt 3 ]]; then
+    echo Usage: changeExt old-extension new-extension file ...
+    exit 1
+
+else
+    OLD=$1
+    NEW=$2
+    shift 2
+    for FILE in "$@"; do
+        EXT="${FILE##*.}"
+        if [[ $EXT == $OLD ]]; then
+            NAME="${FILE%.*}"
+            mv "$FILE" "$NAME.$NEW"
+        fi
+    done
+fi
